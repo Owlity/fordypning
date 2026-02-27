@@ -83,7 +83,7 @@ while True:
                 y_velocity += 10.5   # extra downward force
    
     
-    
+    #trig
     if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1. and not punching:
                 mousePos = pygame.mouse.get_pos()
