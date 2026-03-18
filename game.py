@@ -39,6 +39,7 @@ on_ground = False
 double_jump = False
 # Ground
 ground_y = HEIGHT - 50
+wave = 0
 
 
 # Colors
@@ -56,7 +57,8 @@ punching = False
 hand_offset = 0
 hand_speed = 6
 max_reach = 100
-
+hand_x_distance = 0
+hand_y_distance = 0
 
 
 
@@ -87,15 +89,22 @@ while True:
     if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1. and not punching:
                 mousePos = pygame.mouse.get_pos()
+                #gets the position of the mouse
                 adjecent = mousePos[0] - x 
                 opposite = mousePos[1] - y
-                print(mousePos, adjecent, opposite)
+                #gets the vertical and horizontal axis difference via x2-x1 and y2-y1
+                #print(mousePos, adjecent, opposite)
                 wave =  math.atan2(opposite, adjecent ) 
-                print(wave)
+                #gets the angle of the punch through right angle trigenometry
+                #print(wave)
                 max_height = (math.tan(wave))*max_reach
+                #uses trig to find out the height with the angle and lenght
                 (math.tan(wave))*max_reach == max_height
                 print(max_height)
                 punching = True
+    hand_x_distance = math.cos(wave) * hand_offset
+    hand_y_distance = math.sin(wave) * hand_offset
+                
 # Fast fall
 
  
@@ -110,15 +119,15 @@ while True:
 
         if hand_offset <= 0:
             hand_offset = 0
-            #hand_speed = abs(hand_speed)
+            hand_speed = abs(hand_speed)
             punching = False
 
 
 
 
     # Hand (punching part)
-    hand_x = x + size // 2 + hand_offset
-    hand_y = y + size // 2 - hand_height // 2
+    hand_x = x + size // 2 + hand_x_distance
+    hand_y = y + size // 2 + hand_y_distance
 
     pygame.draw.rect(
         screen,
@@ -180,6 +189,9 @@ while True:
 
     pygame.display.flip()
     clock.tick(60)
+   
+    
+
 
 
 
