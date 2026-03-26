@@ -59,11 +59,11 @@ buttons = [
 
 # Colors
 WHITE = (240, 240, 240)
-BLUE = (0, 150, 255)
+BLUE = (66, 185, 245)
 DARK = (30, 30, 30)
 GRAY = (128, 128, 128)
 GREEN = (0, 128, 0)
-PINK = (253, 93, 168)
+Character = (245, 132, 66)
 # Square (player)
 size = 40
 x = WIDTH // 2 - size // 2
@@ -96,12 +96,23 @@ hand_height = 10
 # Punch variables
 punching = False
 hand_offset = 0
-hand_speed = 6
-max_reach = 100
+hand_speed = 15
+max_reach = 170
 hand_x_distance = 0
 hand_y_distance = 0
+# New dash that use hand physics
+dash = False
+dash_distance = 250
+dash_speed = 13
+dash_countdown = 0
+dash_cooldown = 5
+dash_x_distance = 0
+dash_y_distance = 0
 
 
+
+# sprites
+#image = pygame.image.load('sprite/target.piskel')
 
 # Game loop
 while True:
@@ -146,9 +157,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-            # handle jump
-            # handle punch
-        # Jump
+          
                                     
 
         if event.type == pygame.KEYDOWN:
@@ -168,10 +177,7 @@ while True:
                 click_buffer = click_buffer_time 
 
                 
-# Fast fall
 
- 
- 
     # Punch animation
     if punching:
         
@@ -187,9 +193,6 @@ while True:
             hand_speed = abs(hand_speed)
             punching = False
 
-
-
-
     # Hand (punching part)
     hand_x = x + size // 2 + hand_x_distance
     hand_y = y + size // 2 + hand_y_distance
@@ -200,11 +203,19 @@ while True:
         (hand_x, hand_y, hand_width, hand_height)
     )
 
+    if dash_countdown > 0:
+    
+        dash_countdown-=1
 
     # Grapple
-    # if event.type == pygame.KEYDOWN:
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.button == 3:
+            if dash_countdown <= 0:
+                dash_countdown = dash_cooldown*60
+                print("right")
+
     
-     #   if event.key == pygame.K_e:
+    
    
                  
 
@@ -243,7 +254,7 @@ while True:
         pygame.draw.rect(screen, GREEN, platform)
 
     # Square
-    pygame.draw.rect(screen, PINK, (x, y, size, size))
+    pygame.draw.rect(screen, Character, (x, y, size, size))
 
     # Square settings
 
@@ -264,7 +275,7 @@ while True:
 
     pygame.draw.rect(
         screen,
-        PINK,
+        Character,
         (hand_x, hand_y, hand_width, hand_height)
     )
 
@@ -279,4 +290,3 @@ while True:
 
 
 
-d
