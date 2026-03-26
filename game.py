@@ -5,10 +5,6 @@ import sys
 # Initialize pygame
 pygame.init()
 
-# Screen settings
-WIDTH, HEIGHT = 1880, 1080
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Moving Square")
 
 # Clock
 clock = pygame.time.Clock()
@@ -17,9 +13,48 @@ clock = pygame.time.Clock()
 
 
 # Screen
-WIDTH, HEIGHT = 920, 480
+WIDTH, HEIGHT = 1920, 1080
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Gravity Square")
+
+
+BG_COLOR = (30, 30, 30)
+BUTTON_COLOR = (70, 130, 180)
+HOVER_COLOR = (100, 170, 220)
+TEXT_COLOR = (255, 255, 255)
+
+# Font
+font = pygame.font.SysFont(None, 36)
+
+# Button class
+class Button:
+    def __init__(self, text, x, y, w, h):
+        self.text = text
+        self.rect = pygame.Rect(x, y, w, h)
+
+    def draw(self, surface):
+        color = HOVER_COLOR if self.rect.collidepoint(pygame.mouse.get_pos()) else BUTTON_COLOR
+        pygame.draw.rect(surface, color, self.rect)
+        pygame.draw.rect(surface, (0, 0, 0), self.rect, 2)
+
+        text_surf = font.render(self.text, True, TEXT_COLOR)
+        text_rect = text_surf.get_rect(center=self.rect.center)
+        surface.blit(text_surf, text_rect)
+
+    def clicked(self, event):
+        return (
+            event.type == pygame.MOUSEBUTTONDOWN
+            and event.button == 1
+            and self.rect.collidepoint(event.pos)
+        )
+
+# Create buttons
+buttons = [
+    Button("Play", 200, 120, 200, 50),
+    Button("Options", 200, 190, 200, 50),
+    Button("Quit", 200, 260, 200, 50)
+]
+
 
 
 # Colors
@@ -27,11 +62,17 @@ WHITE = (240, 240, 240)
 BLUE = (0, 150, 255)
 DARK = (30, 30, 30)
 GRAY = (128, 128, 128)
+GREEN = (0, 128, 0)
+PINK = (253, 93, 168)
 # Square (player)
 size = 40
 x = WIDTH // 2 - size // 2
 y = HEIGHT - size - 50
 
+jump_buffer = 0
+jump_buffer_time = 10
+click_buffer = 0
+click_buffer_time = 10
 y_velocity = 0
 gravity = 0.8
 jump_strength = -17
@@ -64,46 +105,68 @@ hand_y_distance = 0
 
 # Game loop
 while True:
+    if jump_buffer > 0:
+        jump_buffer -= 1
+
+    if jump_buffer > 0 and on_ground:
+        y_velocity = jump_strength
+        on_ground = False
+        double_jump = True
+        jump_buffer = 0
+
+    elif jump_buffer > 0 and double_jump:
+        y_velocity = jump_strength
+        on_ground = False
+        double_jump = False
+        jump_buffer = 0
+
+    if click_buffer > 0:
+        click_buffer -= 1
+
+    if click_buffer > 0 and not punching:
+        mousePos = pygame.mouse.get_pos()
+        #gets the position of the mouse
+        adjecent = mousePos[0] - x 
+        opposite = mousePos[1] - y
+        #gets the vertical and horizontal axis difference via x2-x1 and y2-y1
+        #print(mousePos, adjecent, opposite)
+        wave =  math.atan2(opposite, adjecent ) 
+        #gets the angle of the punch through right angle trigenometry
+        #print(wave)
+        max_height = (math.tan(wave))*max_reach
+        #uses trig to find out the height with the angle and lenght
+        (math.tan(wave))*max_reach == max_height
+        print(max_height)
+        punching = True
+        click_buffer = 0
+
+
     for event in pygame.event.get():
+       
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
             # handle jump
             # handle punch
         # Jump
-    
+                                    
+
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_w and on_ground:
-                y_velocity = jump_strength
-                on_ground = False
-                double_jump = True
-            elif  event.key == pygame.K_w and double_jump:
-                y_velocity = jump_strength
-                on_ground = False
-                double_jump = False
+            if event.key == pygame.K_w or event.key == pygame.K_SPACE: 
+                jump_buffer = jump_buffer_time
+              
             if event.key == pygame.K_s and on_ground == False:
                 y_velocity += 10.5   # extra downward force
    
     
+ 
+
+
     #trig
-    if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1. and not punching:
-                mousePos = pygame.mouse.get_pos()
-                #gets the position of the mouse
-                adjecent = mousePos[0] - x 
-                opposite = mousePos[1] - y
-                #gets the vertical and horizontal axis difference via x2-x1 and y2-y1
-                #print(mousePos, adjecent, opposite)
-                wave =  math.atan2(opposite, adjecent ) 
-                #gets the angle of the punch through right angle trigenometry
-                #print(wave)
-                max_height = (math.tan(wave))*max_reach
-                #uses trig to find out the height with the angle and lenght
-                (math.tan(wave))*max_reach == max_height
-                print(max_height)
-                punching = True
-    hand_x_distance = math.cos(wave) * hand_offset
-    hand_y_distance = math.sin(wave) * hand_offset
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1 and not punching:
+                click_buffer = click_buffer_time 
+
                 
 # Fast fall
 
@@ -114,6 +177,8 @@ while True:
         
         hand_offset += hand_speed
 
+        hand_x_distance = math.cos(wave) * hand_offset
+        hand_y_distance = math.sin(wave) * hand_offset
         if hand_offset >= max_reach:
             hand_speed = -hand_speed
 
@@ -131,7 +196,7 @@ while True:
 
     pygame.draw.rect(
         screen,
-        GRAY,
+        GREEN,
         (hand_x, hand_y, hand_width, hand_height)
     )
 
@@ -156,13 +221,29 @@ while True:
         double_jump = False
 
     # Draw
-    screen.fill(DARK)
+    screen.fill(BLUE)
 
     # Ground
-    pygame.draw.rect(screen, WHITE, (0, ground_y, WIDTH, HEIGHT - ground_y))
+    pygame.draw.rect(screen, GREEN, (0, ground_y, WIDTH, HEIGHT - ground_y))
+
+    
+
+    player_rect = pygame.Rect(x, y, size, size)
+    platforms = [ #Array
+        pygame.Rect(20, 800, 400, 40),
+        pygame.Rect(600, 750, 200, 30),
+    ]
+    for platform in platforms:
+        if y + size >= platform.top and y+size <= platform.bottom:
+            if x < platform.right and x > platform.left:
+                y = platform.top - size
+                y_velocity = 0
+                on_ground = True
+                double_jump = False
+        pygame.draw.rect(screen, GREEN, platform)
 
     # Square
-    pygame.draw.rect(screen, BLUE, (x, y, size, size))
+    pygame.draw.rect(screen, PINK, (x, y, size, size))
 
     # Square settings
 
@@ -183,7 +264,7 @@ while True:
 
     pygame.draw.rect(
         screen,
-        GRAY,
+        PINK,
         (hand_x, hand_y, hand_width, hand_height)
     )
 
@@ -198,3 +279,4 @@ while True:
 
 
 
+d
