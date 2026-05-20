@@ -15,7 +15,7 @@ clock = pygame.time.Clock()
 # Screen
 WIDTH, HEIGHT = 1920, 1080
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Gravity Square")
+pygame.display.set_caption("John Persona 6.2: The Awakening of Persona 2 Rewind Redux Deluxe 8")
 
 
 BG_COLOR = (30, 30, 30)
@@ -63,7 +63,10 @@ BLUE = (66, 185, 245)
 DARK = (30, 30, 30)
 GRAY = (128, 128, 128)
 GREEN = (0, 128, 0)
+GREEND = (0, 80, 0)
 Character = (245, 132, 66)
+hand = (0, 0, 0, 0.1)
+BROWN = (125, 54, 0)
 # Square (player)
 size = 40
 x = WIDTH // 2 - size // 2
@@ -83,9 +86,6 @@ ground_y = HEIGHT - 50
 wave = 0
 
 
-# Colors
-
-HAND_COLOR = (0, 150, 200)
 
 # Sizes
 
@@ -109,6 +109,9 @@ dash_cooldown = 5
 dash_x_distance = 0
 dash_y_distance = 0
 
+# sprites
+sword = pygame.image.load("sprites\sword.png")
+sword = pygame.image.load("sprites\sword.png")
 
 
 # sprites
@@ -165,7 +168,7 @@ while True:
                 jump_buffer = jump_buffer_time
               
             if event.key == pygame.K_s and on_ground == False:
-                y_velocity += 10.5   # extra downward force
+                y_velocity += 15.5   # extra downward force
    
     
  
@@ -177,7 +180,8 @@ while True:
                 click_buffer = click_buffer_time 
 
                 
-
+    swordscale = pygame.transform.rotate(sword,(-60 * wave)-45)
+    swordscale = pygame.transform.scale (swordscale, (64, 64))
     # Punch animation
     if punching:
         
@@ -199,9 +203,10 @@ while True:
 
     pygame.draw.rect(
         screen,
-        GREEN,
+        hand,
         (hand_x, hand_y, hand_width, hand_height)
     )
+    
 
     if dash_countdown > 0:
     
@@ -232,17 +237,19 @@ while True:
         double_jump = False
 
     # Draw
-    screen.fill(BLUE)
+    screen.fill(GREEND) 
 
     # Ground
     pygame.draw.rect(screen, GREEN, (0, ground_y, WIDTH, HEIGHT - ground_y))
-
     
 
     player_rect = pygame.Rect(x, y, size, size)
     platforms = [ #Array
-        pygame.Rect(20, 800, 400, 40),
+        pygame.Rect(20, 800, 400, 30),
         pygame.Rect(600, 750, 200, 30),
+        pygame.Rect(1200, 800, 400, 30),
+        pygame.Rect(1600, 400, 250, 30),
+        pygame.Rect(1600, 400, 30, 250),
     ]
     for platform in platforms:
         if y + size >= platform.top and y+size <= platform.bottom:
@@ -251,7 +258,7 @@ while True:
                 y_velocity = 0
                 on_ground = True
                 double_jump = False
-        pygame.draw.rect(screen, GREEN, platform)
+        pygame.draw.rect(screen, BROWN, platform)
 
     # Square
     pygame.draw.rect(screen, Character, (x, y, size, size))
@@ -275,10 +282,13 @@ while True:
 
     pygame.draw.rect(
         screen,
-        Character,
+        hand,
         (hand_x, hand_y, hand_width, hand_height)
     )
-
+  
+   
+    screen.blit(swordscale, (hand_x - 10, hand_y -30 ))
+    
     pygame.display.flip()
     clock.tick(60)
    
@@ -286,7 +296,7 @@ while True:
 
 
 
-#ujgufgj
+
 
 
 
