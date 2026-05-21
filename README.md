@@ -10,6 +10,7 @@ Target system
 - target collision
 - target counter
 - target sprite
+- dash
 - camera follows
 - grapple physics
 - grapple sprite

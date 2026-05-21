@@ -89,8 +89,8 @@ wave = 0
 
 # Sizes
 
-hand_width = 20
-hand_height = 10
+hand_width = 40
+hand_height = 30
 
 
 # Punch variables
@@ -187,8 +187,8 @@ while True:
         
         hand_offset += hand_speed
 
-        hand_x_distance = math.cos(wave) * hand_offset
-        hand_y_distance = math.sin(wave) * hand_offset
+        hand_x_distance = (math.cos(wave)-0.15) * hand_offset
+        hand_y_distance = (math.sin(wave)-0.25) * hand_offset
         if hand_offset >= max_reach:
             hand_speed = -hand_speed
 
@@ -267,7 +267,19 @@ while True:
 
     speed = 5
 
-
+    player_rect = pygame.Rect(x, y, size, size)
+    targets = [ #Array
+        pygame.Rect(20, 750, 26, 26),
+        pygame.Rect(600, 700, 26, 26),
+        pygame.Rect(1200, 750, 26, 26),
+        pygame.Rect(1720, 480, 26, 26),
+        pygame.Rect(1700, 350, 26, 26),
+    ]
+    for target in targets:
+        pygame.draw.rect(screen, DARK, target)
+        if target.colliderect(hand):
+            pygame.draw.rect(screen, Character, target)
+            print ("collide")
     # Key presses
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
@@ -287,10 +299,11 @@ while True:
     )
   
    
-    screen.blit(swordscale, (hand_x - 10, hand_y -30 ))
+    screen.blit(swordscale, (hand_x - 10, hand_y -20 ))
     
     pygame.display.flip()
     clock.tick(60)
+
    
     
 
