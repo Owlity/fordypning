@@ -55,7 +55,7 @@ buttons = [
     Button("Quit", 200, 260, 200, 50)
 ]
 
-
+TARGET_COUNT = 0
 
 # Colors
 WHITE = (240, 240, 240)
@@ -86,6 +86,14 @@ ground_y = HEIGHT - 50
 wave = 0
 
 
+player_rect = pygame.Rect(x, y, size, size)
+targets = [ #Array
+        pygame.Rect(20, 750, 26, 26),
+        pygame.Rect(600, 700, 26, 26),
+        pygame.Rect(1200, 750, 26, 26),
+        pygame.Rect(1720, 480, 26, 26),
+        pygame.Rect(1700, 350, 26, 26),
+    ]
 
 # Sizes
 
@@ -222,7 +230,7 @@ while True:
     
     
    
-                 
+       
 
 
     # Apply gravity
@@ -243,7 +251,7 @@ while True:
     pygame.draw.rect(screen, GREEN, (0, ground_y, WIDTH, HEIGHT - ground_y))
     
 
-    player_rect = pygame.Rect(x, y, size, size)
+    
     platforms = [ #Array
         pygame.Rect(20, 800, 400, 30),
         pygame.Rect(600, 750, 200, 30),
@@ -267,26 +275,25 @@ while True:
 
     speed = 5
 
-    player_rect = pygame.Rect(x, y, size, size)
-    targets = [ #Array
-        pygame.Rect(20, 750, 26, 26),
-        pygame.Rect(600, 700, 26, 26),
-        pygame.Rect(1200, 750, 26, 26),
-        pygame.Rect(1720, 480, 26, 26),
-        pygame.Rect(1700, 350, 26, 26),
-    ]
+
+
     for target in targets:
         pygame.draw.rect(screen, DARK, target)
+        #collide = pygame.Rect.colliderect(hand, target)  
         if target.colliderect(hand):
-            pygame.draw.rect(screen, Character, target)
             print ("collide")
+    # if target.colliderect(hand):
+    #    pygame.draw.rect(screen, Character, target)
+    #ø    print ("collide")
     # Key presses
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
         x -= speed
     if keys[pygame.K_d]:
         x += speed
-   
+
+
+
 
     # Keep square on screen
     square_x = max(0, min(WIDTH - size, x))
