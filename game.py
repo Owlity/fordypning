@@ -9,7 +9,7 @@ pygame.init()
 # Clock
 clock = pygame.time.Clock()
 
-
+font = pygame.font.SysFont("Arial", 36)
 
 
 # Screen
@@ -24,7 +24,7 @@ HOVER_COLOR = (100, 170, 220)
 TEXT_COLOR = (255, 255, 255)
 
 # Font
-font = pygame.font.SysFont(None, 36)
+font = pygame.font.SysFont('serif', 36)
 
 # Button class
 class Button:
@@ -95,6 +95,8 @@ targets = [ #Array
         pygame.Rect(1700, 350, 26, 26),
     ]
 
+
+
 # Sizes
 
 hand_width = 40
@@ -121,12 +123,17 @@ dash_y_distance = 0
 sword = pygame.image.load("sprites\sword.png")
 sword = pygame.image.load("sprites\sword.png")
 
-
+gamescore = 0
 # sprites
 #image = pygame.image.load('sprite/target.piskel')
 
 # Game loop
 while True:
+
+    text = font.render(str(gamescore) + " targets", True, WHITE)
+ 
+    textrect = text.get_rect()
+
     if jump_buffer > 0:
         jump_buffer -= 1
 
@@ -169,8 +176,6 @@ while True:
             pygame.quit()
             sys.exit()
           
-                                    
-
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w or event.key == pygame.K_SPACE: 
                 jump_buffer = jump_buffer_time
@@ -178,7 +183,13 @@ while True:
             if event.key == pygame.K_s and on_ground == False:
                 y_velocity += 15.5   # extra downward force
    
-    
+
+    #restart button
+    # if event.type == pygame.KEYDOWN:
+    #    if event.key == pygame.K_r:
+    #       pygame.QUIT
+    #      pygame.init()
+ 
  
 
 
@@ -209,11 +220,7 @@ while True:
     hand_x = x + size // 2 + hand_x_distance
     hand_y = y + size // 2 + hand_y_distance
 
-    pygame.draw.rect(
-        screen,
-        hand,
-        (hand_x, hand_y, hand_width, hand_height)
-    )
+  
     
 
     if dash_countdown > 0:
@@ -221,11 +228,11 @@ while True:
         dash_countdown-=1
 
     # Grapple
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        if event.button == 3:
-            if dash_countdown <= 0:
-                dash_countdown = dash_cooldown*60
-                print("right")
+    #if event.type == pygame.MOUSEBUTTONDOWN:
+    #     if event.button == 3:
+    #        if dash_countdown <= 0:
+     #           dash_countdown = dash_cooldown*60
+     #           print("right")
 
     
     
@@ -280,8 +287,6 @@ while True:
     for target in targets:
         pygame.draw.rect(screen, DARK, target)
         #collide = pygame.Rect.colliderect(hand, target)  
-        if target.colliderect(hand):
-            print ("collide")
     # if target.colliderect(hand):
     #    pygame.draw.rect(screen, Character, target)
     #ø    print ("collide")
@@ -299,17 +304,37 @@ while True:
     square_x = max(0, min(WIDTH - size, x))
     square_y = max(0, min(HEIGHT - size, y))
 
-    pygame.draw.rect(
-        screen,
-        hand,
-        (hand_x, hand_y, hand_width, hand_height)
-    )
   
+    ticks=pygame.time.get_ticks()
+    millis=ticks%1000
+    seconds=int(ticks/1000 % 60)
+    minutes=int(ticks/60000 % 24)
+    out='{minutes:02d}:{seconds:02d}:{millis}'.format(minutes=minutes, millis=millis, seconds=seconds)
+    print(out)
    
     screen.blit(swordscale, (hand_x - 10, hand_y -20 ))
-    
+    for target in targets:
+        handRect = pygame.Rect(hand_x, hand_y, hand_width, hand_height)
+        if target.colliderect(handRect):
+            gamescore += 1
+            print (gamescore)
+            targets.pop(targets.index(target))
+
+    text2 = font.render(str(out), True, WHITE)
+    textrect2 = text2.get_rect()
+    textrect2.center = (WIDTH/2, 50)
+    screen.blit(text, textrect)
+    screen.blit(text2, textrect2)  
+    pygame.display.update()
     pygame.display.flip()
+
+    for events in pygame.event.get():
+        if events.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+
     clock.tick(60)
+ 
 
    
     
