@@ -268,16 +268,16 @@ while True:
   
     
 
-    if dash_countdown > 0:
+    #if dash_countdown > 0:
     
-        dash_countdown-=1
+    #    dash_countdown-=1
 
-    # Grapple
-    #if event.type == pygame.MOUSEBUTTONDOWN:
-    #     if event.button == 3:
-    #        if dash_countdown <= 0:
-     #           dash_countdown = dash_cooldown*60
-     #           print("right")
+        #Grapple
+    #    if event.type == pygame.MOUSEBUTTONDOWN:
+    #        if event.button == 3:
+    #            if dash_countdown <= 0:
+    #                dash_countdown = dash_cooldown*60
+    #                print("right")
 
     
     

@@ -1,3 +1,13 @@
+Kriterier:
+• Du demonstrerer at du forstår hvordan koden fungerer.
+• Koden er ryddig og oversiktlig.
+• Du har et ryddig UI.
+• Dokumentasjon i form av kommentarer i koden.
+• Brukertesting der du stiller bruker minst 3 spørsmål.
+• Skisser som viser ideene dine.
+• Versjonskontroll, lagre progresjonen din i løpet av prosjektet. (bruk gjerne 
+
+
 Movement including double jump, wasd, buffering, 
 Map
 Grapple
@@ -6,9 +16,9 @@ Target system
 
 10 things to add
 - add backround
-- target array
-- target collision
-- target counter
+- target array -
+- target collision -
+- target counter -
 - target sprite
 - dash
 - camera follows
@@ -34,13 +44,13 @@ Today I playtested several games to decide on the type of game I wanted. I went 
 
 FEEDBACK
 - Bra men bør legge til animation 
-- Kanten av platforms kan du klippe gjennom
+- Kanten av platforms kan du klippe gjennom -
 - det er forvirrende at W og SPACE er begge hopp
 - å hoppe opp på en platform føles rart
-- vis scoren 
+- vis scoren -
 - skru av collision når man ikke slår
 - treffe under platform
-- legg til restart button
+- legg til restart button -
 
 Product
 Target Run is a 2d platformer that revolves around platforming to destroy all of the targets in the least amount of time.
