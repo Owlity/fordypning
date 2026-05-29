@@ -89,11 +89,16 @@ wave = 0
 
 player_rect = pygame.Rect(x, y, size, size)
 targets = [ #Array
-        pygame.Rect(20, 750, 26, 26),
-        pygame.Rect(600, 700, 26, 26),
-        pygame.Rect(1200, 750, 26, 26),
+        pygame.Rect(50, 680, 26, 26),
+        pygame.Rect(650, 700, 26, 26),
+        pygame.Rect(1570, 600, 26, 26),
         pygame.Rect(1720, 480, 26, 26),
         pygame.Rect(1700, 350, 26, 26),
+        pygame.Rect(1890, 5, 26, 26),
+        pygame.Rect(1100, 200, 26, 26),
+        pygame.Rect(100, 190, 26, 26),
+        pygame.Rect(1850, 900, 26, 26),
+        pygame.Rect(750, 300, 26, 26),
     ]
 
 
@@ -131,6 +136,10 @@ with open("highscore.txt", "r") as f:
 # sprites
 #image = pygame.image.load('sprite/target.piskel')
 
+
+
+start_time = pygame.time.get_ticks()
+ticks = pygame.time.get_ticks() - start_time
 # Game loop
 while True:
 
@@ -187,21 +196,52 @@ while True:
               
             if event.key == pygame.K_s and on_ground == False:
                 y_velocity += 15.5   # extra downward force
+                        #!!!!!!I Don't know how i would go about making a restart button so i will use ai to learn and explain in my own words. I take no credit for the following line of code!!!!!
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    # on reset key it sets all of the values back to when the games start
+                    x = WIDTH // 2 - size // 2
+                    y = HEIGHT - size - 50
+                    y_velocity = 0
+                    on_ground = False
+                    double_jump = False
+                    start_time = pygame.time.get_ticks()
+        
+                        # Resets the time to the start time
+                    gamescore = 0 # gamescore resets
+                    ticks = pygame.time.get_ticks()  # gamescore resets
+        
+                        # Targets return
+                    targets = [
+                        pygame.Rect(50, 680, 26, 26),
+                        pygame.Rect(650, 700, 26, 26),
+                        pygame.Rect(1570, 600, 26, 26),
+                        pygame.Rect(1720, 480, 26, 26),
+                        pygame.Rect(1700, 350, 26, 26),
+                        pygame.Rect(1890, 5, 26, 26),
+                        pygame.Rect(1100, 200, 26, 26),
+                        pygame.Rect(100, 190, 26, 26),
+                        pygame.Rect(1850, 900, 26, 26),
+                        pygame.Rect(750, 300, 26, 26),
+                    ] 
+
+                    #!!!!!!!!!!!
+                            #trig
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1 and not punching:
+                click_buffer = click_buffer_time 
    
 
     #restart button
     # if event.type == pygame.KEYDOWN:
-    #    if event.key == pygame.K_r:
-    #       pygame.QUIT
-    #      pygame.init()
- 
+     #   if event.key == pygame.K_r:
+     #      pygame.QUIT
+     #     pygame.init()
+     
+     
  
 
 
-    #trig
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1 and not punching:
-                click_buffer = click_buffer_time 
 
                 
     swordscale = pygame.transform.rotate(sword,(-60 * wave)-45)
@@ -266,6 +306,7 @@ while True:
     
     platforms = [ #Array for platforms that go through each
         pygame.Rect(20, 800, 400, 30),
+        pygame.Rect(30, 300, 300, 30),
         pygame.Rect(600, 750, 200, 30),
         pygame.Rect(850, 550, 200, 30),
         pygame.Rect(625, 400, 200, 30),
@@ -313,7 +354,7 @@ while True:
     square_y = max(0, min(HEIGHT - size, y))
 
   
-    ticks=pygame.time.get_ticks()
+    ticks=pygame.time.get_ticks() - start_time
     millis=ticks%1000
     seconds=int(ticks/1000 % 60)
  
@@ -334,7 +375,7 @@ while True:
 
 
     
-    if gamescore < 1:
+    if gamescore < 10:
         out='{seconds:02d}:{millis}'.format(millis=millis, seconds=seconds)
     else: 
         screen.fill(BLUE)
@@ -374,10 +415,7 @@ while True:
 
    
 
-    for events in pygame.event.get():
-        if events.type == pygame.QUIT:
-            pygame.quit()
-            quit()
+
 
     clock.tick(60)
  
