@@ -60,7 +60,7 @@ font = pygame.font.SysFont('serif', 36)
 
 # Colors
 WHITE = (240, 240, 240)
-BLUE = (66, 185, 245)
+BLUE = (66, 185, 180)
 DARK = (30, 30, 30)
 GRAY = (128, 128, 128)
 GREEN = (0, 128, 0)
@@ -125,6 +125,9 @@ sword = pygame.image.load("sprites\sword.png")
 sword = pygame.image.load("sprites\sword.png")
 
 gamescore = 0
+with open("highscore.txt", "r") as f:
+    #there is a sligh delay with this time but it is somewhat accurate
+    highscore = f.read()
 # sprites
 #image = pygame.image.load('sprite/target.piskel')
 
@@ -313,7 +316,7 @@ while True:
     ticks=pygame.time.get_ticks()
     millis=ticks%1000
     seconds=int(ticks/1000 % 60)
-    minutes=int(ticks/60000 % 24)
+ 
 
    
 
@@ -329,11 +332,32 @@ while True:
 
  
 
-    if gamescore >=5:
-        screen.fill(GRAY)
+
     
-    if gamescore < 5:
-        out='{minutes:02d}:{seconds:02d}:{millis}'.format(minutes=minutes, millis=millis, seconds=seconds)
+    if gamescore < 1:
+        out='{seconds:02d}:{millis}'.format(millis=millis, seconds=seconds)
+    else: 
+        screen.fill(BLUE)
+        splitscore = str(highscore).split(":")
+        print(splitscore)
+    
+        if seconds < int(splitscore[0]):
+            highscore = str(seconds) + ":" + str(millis)
+
+        text3 = font.render("Highscore = " + str(highscore), True, WHITE)
+        textrect3 = text3.get_rect()
+        textrect3.center = (WIDTH/2, 100)
+        screen.blit(text3, textrect3) 
+        text4 = font.render("You win!", True, WHITE)
+        textrect4 = text4.get_rect()
+        textrect4.center = (WIDTH/2, 500)
+        screen.blit(text4, textrect4) 
+        with open("highscore.txt", "w") as f:
+            f.write(highscore)
+        
+
+#open and read the file after the overwriting:
+        
 
     text2 = font.render(str(out), True, WHITE)
     textrect2 = text2.get_rect()
@@ -341,6 +365,10 @@ while True:
     screen.blit(text, textrect)
     screen.blit(text2, textrect2) 
    
+
+
+
+
     pygame.display.update()
     pygame.display.flip()
 
