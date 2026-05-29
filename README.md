@@ -29,7 +29,7 @@ Log
 Today I playtested several games to decide on the type of game I wanted. I went through turn based games like balatro and persona but decided to stick to 2d platformer games. I tested platformer games like silksong, dead cells, celeste, smash melee, and nine sols. I liked the idea of shooting targets like in smash melee where you enter a pre-generated area to shoot targets that test the abilities of a certain character like link managing how much he charges the bow to adjust the path of the arrow. Though the idea of having several characters seems interesting I think just having one is better for me as this is my first game. Today I also set up my github repository to save my progress and updates. Although the gameplay is similar to smash bros I prefer the aesthetic to celeste. I also developed some mechanics that might be implemented. Though some could be considered a little overpowered.  I also had my first go at pixel art through creating a target
 
 
-(Note) Jeg vet genuint ikke hva jeg skal gjøre fordi når jeg startet en log så sa Håkon at jeg ikke skulle ha det. Jeg kommer bare til å lage en description av spillet og sånt
+(Note) Jeg vet genuint ikke hva jeg skal gjøre fordi når jeg startet en log så sa Håkon at jeg ikke skulle ha det (12/02/2026). Jeg kommer bare til å lage en description av spillet og sånt
 
 
 FEEDBACK
@@ -41,3 +41,6 @@ FEEDBACK
 - skru av collision når man ikke slår
 - treffe under platform
 - legg til restart button
+
+Product
+Target Run is a 2d platformer that revolves around platforming to destroy all of the targets in the least amount of time.

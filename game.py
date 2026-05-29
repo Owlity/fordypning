@@ -9,7 +9,8 @@ pygame.init()
 # Clock
 clock = pygame.time.Clock()
 
-font = pygame.font.SysFont("Arial", 36)
+
+
 
 
 # Screen
@@ -24,38 +25,38 @@ HOVER_COLOR = (100, 170, 220)
 TEXT_COLOR = (255, 255, 255)
 
 # Font
+#font = pygame.font.SysFont("Arial", 36)
 font = pygame.font.SysFont('serif', 36)
 
-# Button class
-class Button:
-    def __init__(self, text, x, y, w, h):
-        self.text = text
-        self.rect = pygame.Rect(x, y, w, h)
+# starting menu (not functioning)
+#class Button:
+#    def __init__(self, text, x, y, w, h):
+#       self.text = text
+#        self.rect = pygame.Rect(x, y, w, h)
 
-    def draw(self, surface):
-        color = HOVER_COLOR if self.rect.collidepoint(pygame.mouse.get_pos()) else BUTTON_COLOR
-        pygame.draw.rect(surface, color, self.rect)
-        pygame.draw.rect(surface, (0, 0, 0), self.rect, 2)
+#    def draw(self, surface):
+#        color = HOVER_COLOR if self.rect.collidepoint(pygame.mouse.get_pos()) else BUTTON_COLOR
+#        pygame.draw.rect(surface, color, self.rect)
+#        pygame.draw.rect(surface, (0, 0, 0), self.rect, 2)
 
-        text_surf = font.render(self.text, True, TEXT_COLOR)
-        text_rect = text_surf.get_rect(center=self.rect.center)
-        surface.blit(text_surf, text_rect)
+#        text_surf = font.render(self.text, True, TEXT_COLOR)
+#        text_rect = text_surf.get_rect(center=self.rect.center)
+#        surface.blit(text_surf, text_rect)
 
-    def clicked(self, event):
-        return (
-            event.type == pygame.MOUSEBUTTONDOWN
-            and event.button == 1
-            and self.rect.collidepoint(event.pos)
-        )
+#    def clicked(self, event):
+#        return (
+#            event.type == pygame.MOUSEBUTTONDOWN
+#            and event.button == 1
+#            and self.rect.collidepoint(event.pos)
+#        )
 
 # Create buttons
-buttons = [
-    Button("Play", 200, 120, 200, 50),
-    Button("Options", 200, 190, 200, 50),
-    Button("Quit", 200, 260, 200, 50)
-]
+#buttons = [
+#    Button("Play", 200, 120, 200, 50),
+#    Button("Options", 200, 190, 200, 50),
+#    Button("Quit", 200, 260, 200, 50)
+#]
 
-TARGET_COUNT = 0
 
 # Colors
 WHITE = (240, 240, 240)
@@ -84,7 +85,7 @@ double_jump = False
 # Ground
 ground_y = HEIGHT - 50
 wave = 0
-
+#TARGET_COUNT = 0
 
 player_rect = pygame.Rect(x, y, size, size)
 targets = [ #Array
@@ -107,7 +108,7 @@ hand_height = 30
 punching = False
 hand_offset = 0
 hand_speed = 15
-max_reach = 170
+max_reach = 200
 hand_x_distance = 0
 hand_y_distance = 0
 # New dash that use hand physics
@@ -136,6 +137,7 @@ while True:
 
     if jump_buffer > 0:
         jump_buffer -= 1
+        #counts down to zero and records input
 
     if jump_buffer > 0 and on_ground:
         y_velocity = jump_strength
@@ -171,7 +173,7 @@ while True:
 
 
     for event in pygame.event.get():
-       
+       #allows for quitting
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
@@ -259,16 +261,19 @@ while True:
     
 
     
-    platforms = [ #Array
+    platforms = [ #Array for platforms that go through each
         pygame.Rect(20, 800, 400, 30),
         pygame.Rect(600, 750, 200, 30),
+        pygame.Rect(850, 550, 200, 30),
+        pygame.Rect(625, 400, 200, 30),
+        pygame.Rect(1000, 300, 200, 30),
         pygame.Rect(1200, 800, 400, 30),
         pygame.Rect(1600, 400, 250, 30),
         pygame.Rect(1600, 400, 30, 250),
     ]
     for platform in platforms:
         if y + size >= platform.top and y+size <= platform.bottom:
-            if x < platform.right and x > platform.left:
+            if x < platform.right and x + size > platform.left:
                 y = platform.top - size
                 y_velocity = 0
                 on_ground = True
@@ -309,9 +314,11 @@ while True:
     millis=ticks%1000
     seconds=int(ticks/1000 % 60)
     minutes=int(ticks/60000 % 24)
-    out='{minutes:02d}:{seconds:02d}:{millis}'.format(minutes=minutes, millis=millis, seconds=seconds)
-    print(out)
+
    
+
+
+
     screen.blit(swordscale, (hand_x - 10, hand_y -20 ))
     for target in targets:
         handRect = pygame.Rect(hand_x, hand_y, hand_width, hand_height)
@@ -320,13 +327,24 @@ while True:
             print (gamescore)
             targets.pop(targets.index(target))
 
+ 
+
+    if gamescore >=5:
+        screen.fill(GRAY)
+    
+    if gamescore < 5:
+        out='{minutes:02d}:{seconds:02d}:{millis}'.format(minutes=minutes, millis=millis, seconds=seconds)
+
     text2 = font.render(str(out), True, WHITE)
     textrect2 = text2.get_rect()
     textrect2.center = (WIDTH/2, 50)
     screen.blit(text, textrect)
-    screen.blit(text2, textrect2)  
+    screen.blit(text2, textrect2) 
+   
     pygame.display.update()
     pygame.display.flip()
+
+   
 
     for events in pygame.event.get():
         if events.type == pygame.QUIT:
