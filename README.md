@@ -8,6 +8,8 @@ Kriterier:
 • Versjonskontroll, lagre progresjonen din i løpet av prosjektet. (bruk gjerne 
 
 
+IMPORTANT NOTE: RESETING THE GAME WITH R RUINS THE HIGHSCORE
+
 Movement including double jump, wasd, buffering, 
 Map
 Grapple
